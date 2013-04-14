@@ -4,6 +4,7 @@ sysadmin-utils
 A small collection of scripts that might be useful to sysadmins.
 
 
+
 empty-dir
 ---------
 
@@ -12,6 +13,7 @@ Indicate, via return code, whether a given directory is empty or not.
 Example:
 
     if ( empty-dir /etc ); then echo "We're broken" ; fi
+
 
 
 multi-ping
@@ -29,6 +31,23 @@ Requirements:
 
  * The `Net::DNS` perl module.
  * The `ping` + `ping6` binaries.
+
+
+
+splay
+-----
+
+Sleep for a random amount of time, limited by the given max value.  (Default
+is 5 minutes).
+
+Example:
+
+      $ ./splay -v
+      Sleeping for 77 seconds from max splay-time of 120 seconds
+
+      $ ./splay -v -m 20
+      Sleeping for 7 seconds from max splay-time of 20 seconds
+
 
 
 with-lock
@@ -61,6 +80,7 @@ Problems
 Please report any issue/suggestions via the github repository:
 
 * https://github.com/skx/sysadmin-util
+
 
 
 Author
