@@ -1,0 +1,117 @@
+#!/usr/bin/perl -w
+
+=head1 NAME
+
+multi-ping - Multi-protocol ping wrapper
+
+=head1 SYNOPSIS
+
+  multi-ping hostname
+
+=cut
+
+=head1 DESCRIPTION
+
+This wrapper script will invoke one of 'ping' or 'ping6', as appropriate, to test
+connectivity of a remote host, or your route to it.
+
+=cut
+
+=head1 AUTHOR
+
+ Steve
+ --
+ http://www.steve.org.uk/
+
+=cut
+
+=head1 LICENSE
+
+Copyright (c) 2013 by Steve Kemp.  All rights reserved.
+
+This module is free software;
+you can redistribute it and/or modify it under
+the same terms as Perl itself.
+The LICENSE file contains the full text of the license.
+
+=cut
+
+
+use strict;
+use warnings;
+
+
+
+#
+#  The host to ping
+#
+my $HOST = shift;
+if ( !$HOST )
+{
+    print "Usage: multi-ping hostname\n";
+    exit(1);
+}
+
+
+#
+#  Check the dependencies.
+#
+checkSystem();
+
+#
+#  Lookup the IP for the name specified
+#
+my $res = Net::DNS::Resolver->new;
+my $query = $res->query( $HOST, "ANY" );
+
+if ($query)
+{
+    foreach my $rr ( $query->answer )
+    {
+        if ( $rr->type eq "A" )
+        {
+            if ( system("ping -c 1 $HOST >/dev/null 2>/dev/null") == 0 )
+            {
+                print "Host $HOST - " . $rr->address() . " alive\n";
+            }
+            else
+            {
+                print "Host $HOST - " . $rr->address() . " FAILED\n";
+            }
+        }
+        elsif ( $rr->type eq "AAAA" )
+        {
+            if ( system("ping6 -c 1 $HOST >/dev/null 2>/dev/null") == 0 )
+            {
+                print "Host $HOST - " . $rr->address() . " alive\n";
+            }
+            else
+            {
+                print "Host $HOST - " . $rr->address() . " FAILED\n";
+            }
+        }
+    }
+}
+else
+{
+    print "Failed to resolve $HOST\n";
+    exit(1);
+}
+
+
+
+sub checkSystem
+{
+    my $eval = "use Net::DNS;";
+    eval($eval);
+
+    #
+    #  If we don't have Net::DNS we're out of luck.
+    #
+    if ($@)
+    {
+        print "Mising Net::DNS module\n";
+        exit(1);
+    }
+
+}
