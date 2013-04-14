@@ -7,18 +7,24 @@ A small collection of scripts that might be useful to sysadmins.
 with-lock
 ---------
 
-Run a command, unless an existing copy of that command is already present.
+Run a command, unless an existing copy of that command is already running,
+via the creation of a temporary lockfile.
+
 For example:
 
      with-lock rsync ...
 
-A file is created as a lockfile, based upon the SHA1 hash of the command to
+The lockfile-name is based upon the SHA1 hash of the command to
 be executed and the current User-ID.
 
 Existing alternatives:
 
  * lckdo - Requires you to build your own lockfile name
  * flock - Requires you to build your own lockfile name
+
+Issues:
+
+ * The lockfile is orphaned.
 
 
 
