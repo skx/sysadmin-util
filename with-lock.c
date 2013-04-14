@@ -168,7 +168,6 @@ main (int argc, char *argv[])
    * Try to get the lock.
    */
   int result = get_lock (filename);
-  free (filename);
 
   /**
    * If we didn't get the lock abort.
@@ -176,8 +175,10 @@ main (int argc, char *argv[])
   if (result <= 0)
     {
       fprintf (stderr, "Failed to acquire the lockfile (%s).\n", filename);
+      free (filename);
       exit (1);
     }
 
+  free (filename);
   return (execvp (argv[1], argv + 1));
 }
