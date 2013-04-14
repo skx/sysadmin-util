@@ -43,7 +43,7 @@ is 5 minutes).
 Example:
 
       $ ./splay -v
-      Sleeping for 77 seconds from max splay-time of 120 seconds
+      Sleeping for 77 seconds from max splay-time of 300 seconds
 
       $ ./splay -v -m 20
       Sleeping for 7 seconds from max splay-time of 20 seconds

@@ -1,0 +1,114 @@
+#!/usr/bin/perl -w
+
+=head1 NAME
+
+splay - Sleep a (bounded) random amount of time.
+
+=cut
+
+
+=head1 SYNOPSIS
+
+  General Options:
+
+   --max       Specify the maximum sleep-time.
+   --help      Show the help information for this script.
+   --verbose   Show useful debugging information.
+
+=cut
+
+
+=head1 ABOUT
+
+splay is a tool which is designed to sleep for a random amount of
+time, up to a bounded maximum value, then exit.
+
+It is useful for automated cron-jobs where you don't want to hit
+a central resource en mass from a large number of clients.
+
+=cut
+
+=head1 AUTHOR
+
+ Steve
+ --
+ http://www.steve.org.uk/
+
+=cut
+
+
+=head1 LICENSE
+
+Copyright (c) 2013 by Steve Kemp.  All rights reserved.
+
+This module is free software;
+you can redistribute it and/or modify it under
+the same terms as Perl itself.
+The LICENSE file contains the full text of the license.
+
+=cut
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+use Pod::Usage;
+
+
+
+#
+#  Get the options, either defaults or from the command line.
+#
+my %config = parsedOptions();
+
+
+#
+#  Get the random number.
+#
+my $rand = int( ( $config{ 'max' } * rand() ) + 1 );
+
+#
+#  Bound it by the max.
+#
+$rand = $rand % ( $config{ 'max' } );
+
+#
+#  Show the values, if appropriate.
+#
+if ( $config{ 'verbose' } )
+{
+    print "Sleeping for $rand seconds - max was " . $config{ 'max' } . "\n";
+}
+
+
+#
+#  Sleep & exit
+#
+sleep($rand);
+exit(0);
+
+
+=begin doc
+
+Parse the options and return suitable values.
+
+=end doc
+
+=cut
+
+sub parsedOptions
+{
+    my %vars;
+    $vars{ 'max' } = 60 * 5;
+
+    exit
+      if (
+           !GetOptions( "help"    => \$vars{ 'help' },
+                        "max=i"   => \$vars{ 'max' },
+                        "verbose" => \$vars{ 'verbose' } ) );
+
+    pod2usage(1) if ( $vars{ 'help' } );
+
+    return (%vars);
+
+}
