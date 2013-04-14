@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+#  Flush the system's firewall - leaving it defenseless.
+#
+# Steve
+# --
+#
+
+
+PATH=/usr/sbin:/sbin:/bin:/usr/bin
+
+if [ "$UID" = 0 ]; then
+    SUDO=""
+else
+    SUDO="sudo"
+fi
+
+
+#
+# Define default policies of ACCEPT.
+#
+$SUDO iptables -P INPUT ACCEPT
+$SUDO ip6tables -P INPUT ACCEPT
+
+$SUDO iptables -P OUTPUT ACCEPT
+$SUDO ip6tables -P OUTPUT ACCEPT
+
+$SUDO iptables -P FORWARD ACCEPT
+$SUDO ip6tables -P FORWARD ACCEPT
+
+#
+# Delete all existing rules, first
+# IPv4 then IPv6.
+#
+$SUDO iptables -F
+$SUDO ip6tables -F
+
+$SUDO iptables -t nat -F
+$SUDO ip6tables -t nat -F
+
+$SUDO iptables -t mangle -F
+$SUDO ip6tables -t mangle -F
+
+$SUDO iptables -X
+$SUDO ip6tables -X
+
