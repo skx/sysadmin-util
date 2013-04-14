@@ -1,6 +1,5 @@
-
 sysadmin-utils
---------------
+==============
 
 A small collection of scripts that might be useful to sysadmins.
 
@@ -23,5 +22,15 @@ Existing alternatives:
 
 
 
-Steve
--- 
+Problems
+--------
+
+Please report any issue/suggestions via the github repository:
+
+* https://github.com/skx/sysadmin-util
+
+
+Author
+------
+
+Steve Kemp <steve@steve.org.uk>
