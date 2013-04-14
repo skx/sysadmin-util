@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# Indicate, via exit code, whether the named directory is empty.
+#
+# Steve
+# --
+#
+
+
+#
+#  Get the argument
+#
+dir=$1
+
+
+#
+#  Ensure we had an argument
+# 
+if [ -z "$dir" ]; then
+    echo "Usage: $0 directory"
+    exit 2;
+fi
+
+#
+#  Test that the argument was a directory.
+#
+if [ ! -d "$dir" ]; then
+    echo "$dir is not a directory"
+    exit 2
+fi
+
+
+#
+#  Now look for files and report appropriately.
+#
+if [ -z "$(ls -A "$dir")" ]; then
+    exit 0
+else    
+    exit 1
+fi

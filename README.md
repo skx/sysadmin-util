@@ -4,6 +4,15 @@ sysadmin-utils
 A small collection of scripts that might be useful to sysadmins.
 
 
+empty-dir
+---------
+
+Indicate, via return code, whether a given directory is empty or not.
+
+Example:
+
+    if ( empty-dir /etc ); then echo "We're broken" ; fi
+
 
 multi-ping
 ----------
