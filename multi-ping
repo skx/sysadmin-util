@@ -103,7 +103,10 @@ else
 sub checkSystem
 {
     my $eval = "use Net::DNS;";
+
+    ## no critic (Eval)
     eval($eval);
+    ## use critic
 
     #
     #  If we don't have Net::DNS we're out of luck.
