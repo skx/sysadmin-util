@@ -77,7 +77,7 @@ $rand = $rand % ( $config{ 'max' } );
 #
 if ( $config{ 'verbose' } )
 {
-    print "Sleeping for $rand seconds from max splay-time of " . $config{ 'max' } . "seconds.\n";
+    print "Sleeping for $rand seconds from max splay-time of " . $config{ 'max' } . " seconds.\n";
 }
 
 
