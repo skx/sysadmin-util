@@ -48,8 +48,7 @@ Example:
 
      # ./mysql-slave-check
 The replication appears to show an error:
-
-*************************** 1. row ***************************
+..
                   Master_Host: da-db1
                   Master_User: slave
                   Master_Port: 3306
