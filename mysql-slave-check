@@ -75,6 +75,31 @@ EOF
     exit(0);
 }
 
+
+#
+#  If the Debian configuration file doesn't exist
+#
+if ( !-e "/etc/mysql/debian.cnf" )
+{
+    print <<EOF;
+This script expects the file /etc/mysql/debian.cnf to contain suitable
+login details.
+
+For example:
+
+[client]
+host     = localhost
+user     = root
+password = some-pass
+socket   = /var/run/mysqld/mysqld.sock
+
+Please populate this file before re-running this script.  Take care that
+this file is not world-readable.
+
+EOF
+    exit(0);
+}
+
 #
 #  Run the command to check the slave
 #
