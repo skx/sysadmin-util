@@ -34,6 +34,46 @@ Requirements:
 
 
 
+mysql-slave-check
+-----------------
+
+If the current host is a MySQL slave this script will test that the
+slave replication is still working.  It does this by looking for
+the following two lines from the "SHOW SLAVE STATUS" output:
+
+     Slave_IO_Running: Yes
+     Slave_SQL_Runing: Yes
+
+Example:
+
+     # ./mysql-slave-check
+The replication appears to show an error:
+
+*************************** 1. row ***************************
+                  Master_Host: da-db1
+                  Master_User: slave
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000124
+          Read_Master_Log_Pos: 65667
+               Relay_Log_File: relay-log.001139
+                Relay_Log_Pos: 27251
+        Relay_Master_Log_File: mysql-bin.000124
+             Slave_IO_Running: No
+            Slave_SQL_Running: No
+            ..
+
+The script exits silently if all is well, unless you add "`--verbose`":
+
+     # ./mysql-slave-check -v
+The slave is running, successfully.
+
+Requirements:
+
+ * There must be a file /etc/mysql/debian.cnf with valid "user=" and "password=" lines.
+
+
+
 splay
 -----
 
