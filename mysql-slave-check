@@ -53,6 +53,7 @@ The LICENSE file contains the full text of the license.
 use strict;
 use warnings;
 
+use English;
 use Getopt::Long;
 use Pod::Usage;
 
@@ -62,6 +63,17 @@ use Pod::Usage;
 #
 my %config = parsedOptions();
 
+
+#
+#  If we're not root we exit here.
+#
+if ( $UID != "0" )
+{
+    print <<EOF;
+You must launch this script as root.
+EOF
+    exit(0);
+}
 
 #
 #  Run the command to check the slave
