@@ -23,7 +23,7 @@ Ping a host, regardless of whether it is an IPv6 or IPv4 host.
 
 Example:
 
-     multi-ping steve.org.uk
+     $ multi-ping steve.org.uk
      Host steve.org.uk - 80.68.85.46 alive
      Host steve.org.uk - 2001:41c8:125:46:0:0:0:10 alive
 
@@ -67,10 +67,6 @@ Existing alternatives:
 
  * lckdo - Requires you to build your own lockfile name
  * flock - Requires you to build your own lockfile name
-
-Issues:
-
- * The lockfile is orphaned.
 
 
 
