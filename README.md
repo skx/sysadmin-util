@@ -50,7 +50,7 @@ Example:
 
 
 
-sssl-expiry-date
+ssl-expiry-date
 ----------------
 
 Report the date, and number of days, until the given SSL certificate expires.
