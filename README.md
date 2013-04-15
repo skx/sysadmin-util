@@ -50,6 +50,19 @@ Example:
 
 
 
+sssl-expiry-date
+----------------
+
+Report the date, and number of days, until the given SSL certificate expires.
+
+Example:
+
+        ./ssl-expiry-date bbc.co.uk
+        Certificate presented at : bbc.co.uk
+        Expires: Jun 18 13:50:58 2013 GMT  [63 days in the future]
+
+
+
 with-lock
 ---------
 

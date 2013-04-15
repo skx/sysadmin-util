@@ -1,0 +1,73 @@
+#!/bin/sh
+#
+# Check the expiry date of the given SSL certificate.
+#
+# Steve
+# --
+
+
+#
+#  Get the name to test
+#
+name=$1
+
+if [ -z "$name" ]; then
+   echo "Usage: $0 some.host.name"
+   exit 3
+fi
+
+
+
+#
+#
+#
+if ( ! which openssl >/dev/null 2>/dev/null );  then
+   echo "You do not have the 'openssl' tool installed"
+   exit 2
+fi
+
+
+#
+#  Make a temporary file
+#
+tmp=$(mktemp)
+
+
+#
+#  Download the certificate
+#
+if ( ! echo "" | openssl s_client -connect $name:443 > $tmp 2>/dev/null ); then
+   echo "Failed to get cert from https://$name:443/"
+   exit 3
+fi
+
+
+#
+#  Get the expiry date
+#
+date=$(openssl x509 -in "$tmp" -noout -enddate | awk -F= '{print $2}')
+
+#
+#  Remove the temporary file
+#
+rm -f "$tmp"
+
+
+#
+#  Convert the expiry date + todays date to seconds-past epoch
+#
+then=$(date --date="$date" +%s)
+now=$(date +%s)
+
+#
+#  Day diff 
+#
+diff=$(expr "$then" - "$now" )
+diff=$(expr $diff / 86400 )
+
+#
+#  All done
+#
+echo "Certificate presented at : $name"
+echo "Expires: $date  [$diff days in the future]"
+
