@@ -1,0 +1,197 @@
+#!/usr/bin/perl -w
+
+=head1 NAME
+
+with-lock - Prevent multiple executions of a program
+
+=cut
+
+
+=head1 SYNOPSIS
+
+  General Options:
+
+   --help      Show the help information for this script.
+   --verbose   Show useful debugging information.
+
+=cut
+
+
+=head1 ABOUT
+
+with-lock allows you to run a command under an execlusive
+lock - this will prevent you from running two identical
+commands at the same time.
+
+The program is similar to lckdo but automatically determines
+the name of the lockfile to use by hashing the specified command.
+
+
+=cut
+
+=head1 AUTHOR
+
+ Steve
+ --
+ http://www.steve.org.uk/
+
+=cut
+
+
+=head1 LICENSE
+
+Copyright (c) 2013 by Steve Kemp.  All rights reserved.
+
+This module is free software;
+you can redistribute it and/or modify it under
+the same terms as Perl itself.
+The LICENSE file contains the full text of the license.
+
+=cut
+
+
+
+use strict;
+use warnings;
+
+use English;
+use Fcntl qw(:DEFAULT :flock);
+use Getopt::Long;
+
+
+
+#
+#  Get the options, either defaults or from the command line.
+#
+my %config = parsedOptions();
+
+
+#
+#  Ensure we have arguments
+#
+if ( $#ARGV < 0 )
+{
+    print "Usage: $0 command to execute\n";
+    exit(1);
+}
+
+
+#
+#  Sum up the arguments we have
+#
+my $hash = sumArgs(@ARGV);
+
+
+#
+#  The lockfile we'll use
+#
+my $lock = "/var/tmp/$UID.$hash";
+
+
+
+#
+#  Open it.
+#
+open( my $handle, ">", $lock ) or
+  die "Failed to open lockfile $lock - $!";
+
+
+#
+#  Lock it, aborting on error.
+#
+unless ( flock( $handle, LOCK_EX | LOCK_NB ) )
+{
+    print "Failed to acquire lock\n";
+    if ( $config{ 'verbose' } )
+    {
+        print "Lockfile is $lock\n";
+    }
+    exit(1);
+}
+
+
+#
+#  Run our command.
+#
+my $ret = system(@ARGV);
+
+
+#
+#  Cleanup
+#
+close($handle);
+unlink($lock) if ($lock);
+exit($ret);
+
+
+
+=begin doc
+
+Parse the command-line options.
+
+=end doc
+
+=cut
+
+sub parsedOptions
+{
+    my %vars;
+
+    exit
+      if (
+           !GetOptions( "help"    => \$vars{ 'help' },
+                        "verbose" => \$vars{ 'verbose' } ) );
+
+    pod2usage(1) if ( $vars{ 'help' } );
+
+    return (%vars);
+
+}
+
+
+=begin doc
+
+Checksum the given array (== command line program + args ) and return
+the SHA1 digest of them
+
+=end doc
+
+=cut
+
+sub sumArgs
+{
+    my (@args) = (@_);
+
+    my $hash = undef;
+
+    foreach my $module (qw! Digest::SHA Digest::SHA1 !)
+    {
+
+        # If we succeeded in calculating the hash we're done.
+        next if ( defined($hash) );
+
+        # Attempt to load the module
+        my $eval = "use $module;";
+
+        ## no critic (Eval)
+        eval($eval);
+        ## use critic
+
+        #
+        #  Loaded module, with no errors.
+        #
+        if ( !$@ )
+        {
+            my $object = $module->new;
+
+            foreach my $a (@args)
+            {
+                $object->add($a);
+            }
+
+            $hash = $object->hexdigest();
+        }
+    }
+
+    return ($hash);
+}
