@@ -38,11 +38,14 @@ mysql-slave-check
 -----------------
 
 If the current host is a MySQL slave this script will test that the
-slave replication is still working.  It does this by looking for
-the following two lines from the "SHOW SLAVE STATUS" output:
+slave replication is still working. 
 
-     Slave_IO_Running: Yes
-     Slave_SQL_Runing: Yes
+Replication is regarded as being OK if the following three conditions
+are true:
+
+* The output of "SHOW SLAVE STATUS" includes: Slave_IO_Running: Yes
+* The output of "SHOW SLAVE STATUS" includes: Slave_SQL_Runing: Yes
+* The slave is less than 24 hours behind the master.
 
 Example:
 
@@ -66,6 +69,8 @@ The script exits silently if all is well, unless you add "`--verbose`":
 
      # ./mysql-slave-check -v
      The slave is running, successfully.
+     Replication lag: 0 seconds
+
 
 Requirements:
 

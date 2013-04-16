@@ -30,6 +30,23 @@ is to avoid noise from cron.
 
 =cut
 
+=head1 REPLICATION TESTING
+
+The replication is regarded as being "OK" if all the following three
+conditions are true:
+
+=over 8
+
+=item The "Slave_IO_Running" setting shows "Yes".
+
+=item The "Slave_SQL_Running" setting shows "Yes".
+
+=item The replication lag is less than 24 hours
+
+=back
+
+=cut
+
 =head1 AUTHOR
 
  Steve
@@ -124,14 +141,25 @@ EOF
     exit(0);
 }
 
+#
+# Get the delay
+#
+my $delay = undef;
+if ( $output =~ /Seconds_Behind_Master: (\d+)/gi )
+{
+    $delay = $1;
+}
 
 #
 #  Otherwise we have the output so we can look for sane values.
 #
 if ( ( $output =~ /Slave_IO_Running: Yes/i ) &&
-     ( $output =~ /Slave_SQL_Running: Yes/i ) )
+     ( $output =~ /Slave_SQL_Running: Yes/i ) &&
+     ( defined($delay) ) &&
+     ( $delay < ( 60 * 60 * 24 ) ) )
 {
     $config{ 'verbose' } && print "The slave is running, successfully.\n";
+    $config{ 'verbose' } && print "Replication lag: $delay seconds\n";
     exit(0);
 }
 
