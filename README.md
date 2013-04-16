@@ -112,7 +112,7 @@ Example:
 
          ./until-success ssh example.com -l root -i ~/.ssh/example.com.key
 
-Related commands:
+Trivial (ba)sh alternatives:
 
 * while true ; do $cmd; done
 * watch -n 2 $cmd
