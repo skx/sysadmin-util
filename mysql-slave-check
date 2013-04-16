@@ -162,12 +162,10 @@ Parse the options and return suitable values.
 sub parsedOptions
 {
     my %vars;
-    $vars{ 'max' } = 60 * 5;
 
     exit
       if (
            !GetOptions( "help"    => \$vars{ 'help' },
-                        "max=i"   => \$vars{ 'max' },
                         "verbose" => \$vars{ 'verbose' } ) );
 
     pod2usage(1) if ( $vars{ 'help' } );
