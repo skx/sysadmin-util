@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+#  Repeat the command until it succeeds - always run at least once
+#
+# Steve
+# -- 
+
+
+#
+#  Run the first time.
+#
+"$@"
+
+
+#
+#  If the status code was not zero then repeat.
+#
+while [ $? -ne 0 ]; do
+    "$@"
+done
+
+

@@ -102,6 +102,23 @@ Example:
 
 
 
+until-success
+-------------
+
+Repeat the specific command until it succeeds - run at least once
+always.
+
+Example:
+
+         ./until-success ssh example.com -l root -i ~/.ssh/example.com.key
+
+Related commands:
+
+* while true ; do $cmd; done
+* watch -n 2 $cmd
+
+
+
 with-lock
 ---------
 
