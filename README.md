@@ -38,7 +38,7 @@ mysql-slave-check
 -----------------
 
 If the current host is a MySQL slave this script will test that the
-slave replication is still working. 
+slave replication is still working.
 
 Replication is regarded as being OK if the following three conditions
 are true:
@@ -75,6 +75,33 @@ The script exits silently if all is well, unless you add "`--verbose`":
 Requirements:
 
  * There must be a file /etc/mysql/debian.cnf with valid "user=" and "password=" lines.
+
+
+
+randpass
+--------
+
+Generate simple random passwords via `/dev/urandom`.
+
+Example:
+
+      $ ./randpass
+      cT3j7Zp6
+      $ ./randpass -n 10
+      ulHrNvYLaa
+      $ ./randpass -n 20 -f
+      oe[d7+e.{Uw=L'RO~[]{
+
+(Adding "-f" uses the full alphabet of possible symbols, otherwise only
+alpha-numeric values are shown.  "-n" sets the length of the generated
+password.)
+
+Existing alternatives:
+
+* apg
+* gpw
+* pwgen
+* ...
 
 
 

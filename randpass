@@ -1,0 +1,59 @@
+#!/bin/sh
+#
+# About
+# -----
+# Generate simple passwords, via /dev/urandom.
+#
+#
+# License
+# -------
+#
+# Copyright (c) 2013 by Steve Kemp.  All rights reserved.
+#
+# This script is free software; you can redistribute it and/or modify it under
+# the same terms as Perl itself.
+#
+# The LICENSE file contains the full text of the license.
+#
+#
+
+
+if [ ! -e /dev/urandom ]; then
+    echo "/dev/urandom isn't available"
+    exit 2
+fi
+
+
+#
+#  The character set to use.
+#
+cset="[:alnum:]"
+
+#
+#  Default length
+#
+len=8
+
+while getopts "h?fn:" opt; do
+  case $opt in
+    h)
+      echo "Usage: $0 [-n N] [-f]"
+      exit 0
+      ;;
+    \?)
+      echo "Usage: $0 [-n N] [-f]"
+      exit 0
+      ;;
+    f)
+      cset="[:graph:]"
+      ;;
+    n)
+      len=$OPTARG
+      ;;
+  esac
+done
+
+#
+#  Output the password
+#
+echo $(cat /dev/urandom | tr -cd "$cset" | head -c $len )
