@@ -92,6 +92,10 @@ Example:
       $ ./splay -v -m 20
       Sleeping for 7 seconds from max splay-time of 20 seconds
 
+Existing alternatives:
+
+* [desync](https://debathena.mit.edu/trac/browser/trunk/athena/bin/desync/)
+
 
 
 ssl-expiry-date
