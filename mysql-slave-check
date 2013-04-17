@@ -60,9 +60,9 @@ conditions are true:
 
 Copyright (c) 2013 by Steve Kemp.  All rights reserved.
 
-This module is free software;
-you can redistribute it and/or modify it under
+This script is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
+
 The LICENSE file contains the full text of the license.
 
 =cut

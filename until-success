@@ -1,9 +1,21 @@
 #!/bin/sh
 #
-#  Repeat the command until it succeeds - always run at least once
+# About
+# -----
+# Repeat the command until it succeeds - always run at least once
 #
-# Steve
-# -- 
+#
+# License
+# -------
+#
+# Copyright (c) 2013 by Steve Kemp.  All rights reserved.
+#
+# This script is free software; you can redistribute it and/or modify it under
+# the same terms as Perl itself.
+#
+# The LICENSE file contains the full text of the license.
+#
+#
 
 
 #
