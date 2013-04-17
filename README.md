@@ -12,7 +12,7 @@ Indicate, via return code, whether a given directory is empty or not.
 
 Example:
 
-    if ( empty-dir /etc ); then echo "We're broken" ; fi
+    if empty-dir /etc; then echo "We're broken" ; fi
 
 
 
