@@ -81,7 +81,7 @@ Requirements:
 randpass
 --------
 
-Generate simple random passwords via `/dev/urandom`.
+Generate a single random password via `/dev/urandom`.
 
 Example:
 
@@ -135,6 +135,25 @@ Example:
         ./ssl-expiry-date bbc.co.uk
         Certificate presented at : bbc.co.uk
         Expires: Jun 18 13:50:58 2013 GMT  [63 days in the future]
+
+
+
+timeout
+-------
+
+Timeout allows you to run a command which will be killed after the
+given number of seconds.
+
+Example:
+
+        # Kill the command after 63 seconds.
+        ./timeout -t 63 top
+
+        # Kill the command after two minutes, five seconds.
+        ./timeout -t 2:5 top
+
+        # Kill the command after three hours, five minutes, and seven seconds
+        ./timeout -t 3:5:7 top
 
 
 
