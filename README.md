@@ -3,6 +3,13 @@ sysadmin-utils
 
 A small collection of scripts that might be useful to sysadmins.
 
+Contributions of new scripts are very welcome, as are suggestions for
+things to install.
+
+I have a preference for Perl, but that does not rule out code that
+needs to be compiled, or code in other scripting languages (Python,
+Ruby, etc).
+
 
 
 empty-dir
