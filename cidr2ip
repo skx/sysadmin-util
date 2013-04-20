@@ -1,0 +1,73 @@
+#!/usr/bin/perl -w
+
+=head1 NAME
+
+cidr2ip - Convert CIDR notation to distinct IPs.
+
+=head1 SYNOPSIS
+
+  cidr2ip 192.168.0.0/24 ..
+
+=cut
+
+=head1 DESCRIPTION
+
+This script will expand each specified CIDR range into a collection of
+distinct IP addresses.
+
+=cut
+
+=head1 AUTHOR
+
+ Steve
+ --
+ http://www.steve.org.uk/
+
+=cut
+
+=head1 LICENSE
+
+Copyright (c) 2013 by Steve Kemp.  All rights reserved.
+
+This script is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
+
+The LICENSE file contains the full text of the license.
+
+=cut
+
+
+use strict;
+use warnings;
+
+
+sub bin2dd
+{
+    join '.', unpack 'C4', pack 'N', $_[
+      0];
+}
+
+sub dd2bin
+{
+    unpack 'N', pack 'C4', split '\.', $_[
+      0];
+}
+
+sub CIDRList
+{
+    my $iter = 0xffffffff >> $_[0];
+    my $mask = ~$iter;
+    my $lo   = dd2bin( $_[1] ) & $mask;
+    map {bin2dd $lo++} 0 .. $iter;
+}
+
+while ( my $cidr = shift )
+{
+    if ( $cidr =~ /^(.*)\/(.*)$/ )
+    {
+        my $i = $1;
+        my $m = $2;
+        print "$_\n" for CIDRList $m, $i;
+    }
+}
+
