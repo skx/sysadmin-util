@@ -122,6 +122,21 @@ Existing alternatives:
 
 
 
+since
+-----
+
+Show the new output since previously reading a file.  This is useful for
+keeping track of logfile updates.
+
+Example:
+
+       $ ./since /var/log/messages >/dev/null
+       $ logger "testing the log"
+       $ ./since /var/log/messages
+       Apr 20 11:24:37 precious skx: testing the log
+
+
+
 splay
 -----
 

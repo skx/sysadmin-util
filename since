@@ -1,0 +1,183 @@
+#!/usr/bin/perl -w
+
+=head1 NAME
+
+since - Show any new content since the last time a file was read.
+
+=cut
+
+=head1 SYNOPSIS
+
+  General Options:
+
+   --help      Show the help information for this script.
+   --verbose   Show useful debugging information.
+
+=cut
+
+=head1 ABOUT
+
+since allows you to show output appended to a file since the last
+time it was executed.  The state of a file is recorded in a trivial
+database in the file ~/.sincedb
+
+This script is useful for tailing logs:
+
+=for example begin
+
+       $ ./since /var/log/messages
+       $ logger "testing the log"
+       $ ./since /var/log/messages
+       Apr 20 11:24:37 precious skx: testing the log
+
+=for example end
+
+=cut
+
+=head1 AUTHOR
+
+ Steve
+ --
+ http://www.steve.org.uk/
+
+=cut
+
+
+=head1 LICENSE
+
+Copyright (c) 2013 by Steve Kemp.  All rights reserved.
+
+This script is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
+
+The LICENSE file contains the full text of the license.
+
+=cut
+
+use strict;
+use warnings;
+
+use NDBM_File;
+use Fcntl qw/SEEK_SET O_RDWR O_CREAT/;
+use Getopt::Long;
+use Pod::Usage;
+
+#
+#  Get the options, either defaults or from the command line.
+#
+my %config = parsedOptions();
+
+
+#
+#  Ensure we have filename(s)
+#
+if ( ! scalar( @ARGV ) )
+{
+    print STDERR "Usage: $0 file1 file2 .. fileN\n";
+    exit(2);
+}
+
+
+#
+#  Create the database, using a tie.
+#
+my %states;
+tie( %states, 'NDBM_File', $config{ 'db' }, O_CREAT | O_RDWR, 0660 ) or
+  die("Error tying the database $config{'db'} : $!");
+
+
+#
+#  For each file on the command line.
+#
+while ( my $filename = shift )
+{
+    $config{ 'verbose' } && print "Reading $filename\n";
+    if ( ! -e $filename ) {
+        print STDERR "Skipping missing file $filename\n";
+        next;
+    }
+
+
+    #
+    #  Get the details of the file.
+    #
+    my ( $dev,  $ino,   $mode,  $nlink, $uid,     $gid, $rdev,
+         $size, $atime, $mtime, $ctime, $blksize, $blocks
+       ) = stat($filename);
+    if ( !defined $dev )
+    {
+        print STDERR "Failed to stat($filename): $!\n";
+        exit(2);
+    }
+
+    my $state_key = "$dev/$ino";
+
+    my $file;
+    if ( !open( $file, "<", $filename ) )
+    {
+        print STDERR "cannot open $filename : $!";
+        next;
+    }
+
+    #
+    # If we have a previously recorded offset then use it.
+    #
+    my $offset = $states{ $state_key } || 0;
+    if ( $offset <= $size )
+    {
+        sysseek( $file, $offset, SEEK_SET );
+    }
+
+    #
+    #  Read until EOF
+    #
+    my $buffer;
+    while ( ( my $read_count = sysread( $file, $buffer, 4096 ) ) > 0 )
+    {
+        $offset += $read_count;
+        print $buffer;
+    }
+
+    # Nothing to read anymore
+    close($file);
+
+    # Update the database with the offset we've now reached.
+    $states{ $state_key } = $offset;
+}
+
+#
+# persist the database, via the tie.
+#
+untie(%states);
+
+#
+#  All done.
+#
+exit(0);
+
+
+
+=begin doc
+
+Parse the options and return suitable values.
+
+=end doc
+
+=cut
+
+sub parsedOptions
+{
+    my %vars;
+
+    $vars{ 'db' } = $ENV{ HOME } . "/.sincedb";
+
+    exit
+      if (
+           !GetOptions( "help"    => \$vars{ 'help' },
+                        "verbose" => \$vars{ 'verbose' } ) );
+
+    pod2usage(1) if ( $vars{ 'help' } );
+
+    return (%vars);
+
+}
