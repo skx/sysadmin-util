@@ -213,6 +213,22 @@ Trivial (ba)sh alternatives:
 
 
 
+which-shell
+-----------
+
+Identify the shell we're running under.
+
+For example:
+
+     $ which-shell 
+     dash
+
+Existing alternatives:
+
+* `ls -l /bin/sh`
+
+
+
 with-lock
 ---------
 
