@@ -1,0 +1,203 @@
+#!/usr/bin/perl -w
+
+=head1 NAME
+
+ago - Show how long ago files/directories were modified
+
+=cut
+
+=head1 SYNOPSIS
+
+  General Options:
+
+   --help      Show the help information for this script.
+   --verbose   Show useful debugging information.
+   --seconds   Show age in seconds only.
+
+=cut
+
+
+=head1 ABOUT
+
+This utility shows how long ago the given file, or files, were modified.
+
+Although it is possible to see this easily via `stat`, or even `ls`, this
+utility shows the age in a more readable fashion.  For example:
+
+=for example begin
+
+    $ ago /etc/passwd
+    /etc/passwd 15 weeks ago
+
+=for example end
+
+An arbitrary number of files, sockets, or directories may be specified upon
+the command-line.
+
+=cut
+
+=head1 AUTHOR
+
+ Steve
+ --
+ http://www.steve.org.uk/
+
+=cut
+
+
+=head1 LICENSE
+
+Copyright (c) 2013 by Steve Kemp.  All rights reserved.
+
+This script is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
+
+The LICENSE file contains the full text of the license.
+
+=cut
+
+
+use strict;
+use warnings;
+use Getopt::Long;
+use Pod::Usage;
+
+
+
+#
+#  Get the options, either defaults or from the command line.
+#
+my %config = parsedOptions();
+
+
+#
+#  Ensure we had files.
+#
+if ( !scalar @ARGV )
+{
+    print "usage $0 file1 file2 .. fileN\n";
+    exit(0);
+}
+
+
+#
+#  Get the current day
+#
+my $NOW = time;
+
+#
+#  Process each file
+#
+while ( my $file = shift )
+{
+    showAge($file);
+}
+
+
+=begin doc
+
+Show the age of the given file.
+
+=end doc
+
+=cut
+
+sub showAge
+{
+    my ($file) = (@_);
+
+    #
+    #  Get the mtime
+    #
+    my $mtime = ( stat($file) )[9];
+    if ( !defined($mtime) )
+    {
+        printf STDERR "Failed to stat $file - $!\n";
+        return;
+    }
+
+    #
+    #  Calculate age in seconds
+    #
+    my $age = $NOW - $mtime;
+
+    #
+    #  Show the file + seconds, or the human-friendly version, as appropriate
+    #
+    if ( $config{ 'seconds' } )
+    {
+        print $file . " " . $age . "\n";
+    }
+    else
+    {
+        print $file . " " . duration($age) . "\n";
+    }
+}
+
+
+=begin doc
+
+Convert a duration, in seconds, into a human-readable time-ago.
+
+=end doc
+
+=cut
+
+sub duration
+{
+    my ($seconds) = (@_);
+
+    if ( $seconds < 60 )
+    {
+
+        # less than a minute
+        return ("Just now");
+    }
+    if ( $seconds <= ( 60 * 60 ) )
+    {
+
+        # less than an hour
+        return ( int( $seconds / 60 ) . " minutes ago" );
+    }
+    if ( $seconds <= ( 60 * 60 * 24 ) )
+    {
+
+        # less than a day
+        return ( int( $seconds / ( 60 * 60 ) ) . " hours ago" );
+    }
+    if ( $seconds <= ( 60 * 60 * 24 * 7 ) )
+    {
+
+        # less than a week
+        return ( int( $seconds / ( 60 * 60 * 24 ) ) . " days ago" );
+    }
+
+    # fall-back weeks ago
+    return ( int( $seconds / ( 60 * 60 * 24 * 7 ) ) . " weeks ago" );
+
+}
+
+
+=begin doc
+
+Parse the options and return suitable values.
+
+=end doc
+
+=cut
+
+sub parsedOptions
+{
+    my %vars;
+
+    exit
+      if (
+           !GetOptions( "help"    => \$vars{ 'help' },
+                        "verbose" => \$vars{ 'verbose' },
+                        "seconds" => \$vars{ 'seconds' } ) );
+
+    pod2usage(1) if ( $vars{ 'help' } );
+
+    return (%vars);
+
+}

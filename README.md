@@ -12,6 +12,22 @@ Ruby, etc).
 
 
 
+ago
+---
+
+Show how long ago a file/directory was modified in a  human-readable fashion.
+
+Example:
+
+     $ ./ago /etc/passwd
+     /etc/passwd 15 weeks ago
+
+Alternatives:
+
+* `stat` and `ls` both show ages, but not in a human-readable fashion.
+
+
+
 empty-dir
 ---------
 
