@@ -28,6 +28,28 @@ Alternatives:
 
 
 
+dupes
+-----
+
+Report on duplicate files, via a SHA1 hash of the contents, recursively.
+
+Example:
+
+$ ./dupes
+./.git/logs/HEAD
+	./.git/logs/refs/heads/master
+./.git/refs/heads/master
+	./.git/refs/remotes/origin/master
+
+Alternatives:
+
+* [fdupes](http://packages.debian.org/fdupes)
+* [fslint](http://packages.debian.org/fslint)
+* [duff](http://packages.debian.org/duff)
+* [rdfind](http://packages.debian.org/rdfind)
+
+
+
 empty-dir
 ---------
 
@@ -236,7 +258,7 @@ Identify the shell we're running under.
 
 For example:
 
-     $ which-shell 
+     $ which-shell
      dash
 
 Existing alternatives:
