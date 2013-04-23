@@ -35,10 +35,10 @@ Report on duplicate files, via a SHA1 hash of the contents, recursively.
 
 Example:
 
-$ ./dupes
-./.git/logs/HEAD
+    $ dupes
+    ./.git/logs/HEAD
 	./.git/logs/refs/heads/master
-./.git/refs/heads/master
+    ./.git/refs/heads/master
 	./.git/refs/remotes/origin/master
 
 Alternatives:
