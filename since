@@ -71,7 +71,7 @@ my %config = parsedOptions();
 #
 #  Ensure we have filename(s)
 #
-if ( ! scalar( @ARGV ) )
+if ( !scalar(@ARGV) )
 {
     print STDERR "Usage: $0 file1 file2 .. fileN\n";
     exit(2);
@@ -92,8 +92,14 @@ tie( %states, 'NDBM_File', $config{ 'db' }, O_CREAT | O_RDWR, 0660 ) or
 while ( my $filename = shift )
 {
     $config{ 'verbose' } && print "Reading $filename\n";
-    if ( ! -e $filename ) {
+    if ( !-e $filename )
+    {
         print STDERR "Skipping missing file $filename\n";
+        next;
+    }
+    if ( -d $filename )
+    {
+        print STDERR "since cannot handle directories: $filename\n";
         next;
     }
 
