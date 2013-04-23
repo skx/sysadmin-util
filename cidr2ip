@@ -43,14 +43,12 @@ use warnings;
 
 sub bin2dd
 {
-    join '.', unpack 'C4', pack 'N', $_[
-      0];
+    join '.', unpack 'C4', pack 'N', $_[0];
 }
 
 sub dd2bin
 {
-    unpack 'N', pack 'C4', split '\.', $_[
-      0];
+    unpack 'N', pack 'C4', split '\.', $_[0];
 }
 
 sub CIDRList
