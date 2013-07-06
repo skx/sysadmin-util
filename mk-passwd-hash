@@ -1,0 +1,49 @@
+#!/usr/bin/ruby
+#
+# This script will prompt for a password and then output
+# a hash which may be used with 'usermod'.
+#
+# Using usermod you can script the changine of passwords
+# for users.
+#
+# NOTE: Intentionally doesn't allow passwords to be entered
+#       via the command-line.
+#
+
+
+#
+#  The random pool from which salts will be taken.
+#
+SALT = ([*('/' '.'),*('A'..'Z'),*('a'..'z'), *('0'..'9')]).sample(8).join
+
+
+#
+#  Prompt for the password, twice to be sure.
+#
+puts "Please enter your plaintext password:"
+pass1 = gets().chomp
+
+puts "Please confirm your password:"
+pass2 = gets().chomp
+
+
+#
+#  Ensure they match
+#
+if ( pass1 != pass2 )
+  puts "Your passwords did not match.  Aborting"
+  exit 1
+end
+
+
+#
+#  Do the magic.
+#
+hash = pass1.crypt("$1$"+8.times.collect{SALT[rand(SALT.length)]}.join+"$")
+
+
+#
+#  We're done.
+#
+puts "Your hash is \t#{hash}\n"
+exit(0)
