@@ -28,6 +28,23 @@ Alternatives:
 
 
 
+cidr2ip
+-------
+
+Given a set of CIDR ranges output the individual IPs in the range(s).
+
+Example:
+
+     $ ./cidr2ip 192.168.0.0/24
+     192.168.0.0
+     192.168.0.1
+     192.168.0.2
+     192.168.0.3
+     192.168.0.4
+     ..
+
+
+
 dupes
 -----
 
