@@ -82,7 +82,7 @@ if ( !scalar(@ARGV) )
 #  Create the database, using a tie.
 #
 my %states;
-tie( %states, 'NDBM_File', $config{ 'db' }, O_CREAT | O_RDWR, 0660 ) or
+tie( %states, 'NDBM_File', $config{ 'db' }, O_CREAT | O_RDWR, oct(660) ) or
   die("Error tying the database $config{'db'} : $!");
 
 
