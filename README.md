@@ -281,6 +281,10 @@ Example:
      Last login: Sat Dec 28 23:25:01 2013 from 5.6.7.8
      user@1.2.3.4:~#
 
+Alternatives:
+
+* `until-success ping -c 1 1.2.3.4; ssh user@1.2.3.4`
+
 
 
 which-shell
