@@ -1,5 +1,5 @@
-#! /bin/bash
-
+#!/bin/sh
+#
 # Wait until a given host is online (determined by ping) then execute the
 # given command
 #
@@ -8,10 +8,15 @@
 #
 # Example
 # ./when-up 1.2.3.4 ssh 1.2.3.4
+#
 
+
+#
+#  Ensure we received the correct number of arguments.
+#
 if [ $# -lt 2 ]; then
-	echo "Usage: when-up HOST COMMAND..."
-	exit 1
+    echo "Usage: when-up HOST COMMAND..."
+    exit 1
 fi
 
 HOST=$1
@@ -20,9 +25,11 @@ echo "Waiting for $HOST to come online..."
 
 false
 while [ $? -ne 0 ]; do
-	sleep 1
-	ping -c 1 -W 1 $HOST >/dev/null
+    sleep 1
+    ping -c 1 -W 1 $HOST >/dev/null
 done
 
-# It's up, do what we're told
-${@:2}
+# By the time we reach here the ping-command has completed successfully
+# so we can launch the command we were given - along with any arguments.
+shift
+$*
