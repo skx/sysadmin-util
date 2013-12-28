@@ -4,14 +4,13 @@
 # given command
 #
 # Usage:
-# ./do-when-up HOST COMMAND...
+# ./when-up HOST COMMAND...
 #
 # Example
-# ./do-when-up 1.2.3.4 ssh 1.2.3.4
+# ./when-up 1.2.3.4 ssh 1.2.3.4
 
 if [ $# -lt 2 ]; then
-	echo "Usage:"
-	echo "  ./do-when-up HOST COMMAND..."
+	echo "Usage: when-up HOST COMMAND..."
 	exit 1
 fi
 
