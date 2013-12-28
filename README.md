@@ -44,6 +44,17 @@ Example:
      ..
 
 
+do-when-up
+----------
+
+Waits until a given host is online (determined by ping until executing a given command
+
+Example:
+
+     $ ./do-when-up 1.2.3.4 ssh user@1.2.3.4
+     Waiting for 1.2.3.4 to come online...
+     Last login: Sat Dec 28 23:25:01 2013 from 5.6.7.8
+     user@1.2.3.4:~#
 
 dupes
 -----
