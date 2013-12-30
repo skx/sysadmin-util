@@ -56,4 +56,5 @@ done
 #
 #  Output the password
 #
-echo $(cat /dev/urandom | tr -cd "$cset" | head -c $len )
+printf "%s\n" $(cat /dev/urandom | tr -cd "$cset" | head -c $len )
+
