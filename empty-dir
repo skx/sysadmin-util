@@ -26,7 +26,7 @@ dir=$1
 
 #
 #  Ensure we had an argument
-# 
+#
 if [ -z "$dir" ]; then
     echo "Usage: $0 directory"
     exit 2;
@@ -46,6 +46,6 @@ fi
 #
 if [ -z "$(ls -A "$dir")" ]; then
     exit 0
-else    
+else
     exit 1
 fi
