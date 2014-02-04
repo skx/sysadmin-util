@@ -1,0 +1,61 @@
+#!/usr/bin/env python2
+#
+# This is reworking of the Python one-liner HTTP server
+#
+# This reworking is required to allow the server to be bound to
+# localhost-only, rather than listening on all interfaces, which
+# is a potential security issue.
+#
+# By default you can launch a simple Python HTTP-server just by
+# running:
+#
+#     $ python -m SimpleHTTPServer 8080
+#
+# With this wrapper you can run:
+#
+#     $ pyhttpd 127.0.0.1:3030
+#
+# or to revert to the all-interfaces behaviour just by specifing the
+# port alone:
+#
+#     $ pyhttpd 3044
+#
+# Steve
+# --
+#
+
+
+import sys
+from SimpleHTTPServer import SimpleHTTPRequestHandler
+import BaseHTTPServer
+
+
+def test(HandlerClass=SimpleHTTPRequestHandler,
+         ServerClass=BaseHTTPServer.HTTPServer):
+
+    protocol = "HTTP/1.0"
+    host = ''
+    port = 8000
+    if len(sys.argv) > 1:
+        arg = sys.argv[1]
+        if ':' in arg:
+            host, port = arg.split(':')
+            port = int(port)
+        else:
+            try:
+                port = int(sys.argv[1])
+            except:
+                host = sys.argv[1]
+
+    server_address = (host, port)
+
+    HandlerClass.protocol_version = protocol
+    httpd = ServerClass(server_address, HandlerClass)
+
+    sa = httpd.socket.getsockname()
+    print "Serving HTTP on", sa[0], "port", sa[1], "..."
+    httpd.serve_forever()
+
+
+if __name__ == "__main__":
+    test()
