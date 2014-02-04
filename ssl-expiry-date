@@ -93,7 +93,7 @@ fi
 now=$(date +%s)
 
 #
-#  Day diff 
+#  Day diff
 #
 diff=$(expr "$then" - "$now" )
 diff=$(expr $diff / 86400 )
