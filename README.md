@@ -170,7 +170,8 @@ Example:
      Serving HTTP on 0.0.0.0 port 8080 ...
 
 or
-     # ./pyhttpd 8080
+
+     $ ./pyhttpd 8080
      Serving HTTP on 127.0.0.1 port 8080 ...
 
 
