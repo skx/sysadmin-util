@@ -1,8 +1,42 @@
 #!/usr/bin/perl
-#
-#  Detect the authentication types a remote host supports.
-#
-#
+
+=head1 NAME
+
+ssh-auth-types - Show the remote authentication types SSH presents.
+
+=head1 SYNOPSIS
+
+  ssh-auth-types host1 host2 .. hostN
+
+=cut
+
+=head1 DESCRIPTION
+
+This script will connect to a remote SSH server, using "none" as an
+authentication type.  It will then parse out the supported/accepted
+authentication types from the error-message.
+
+=cut
+
+=head1 AUTHOR
+
+ Steve
+ --
+ http://www.steve.org.uk/
+
+=cut
+
+=head1 LICENSE
+
+Copyright (c) 2013 by Steve Kemp.  All rights reserved.
+
+This script is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
+
+The LICENSE file contains the full text of the license.
+
+=cut
+
 
 use strict;
 use warnings;
@@ -13,39 +47,45 @@ use File::Temp qw/ tempfile /;
 #
 # Get the host, and ensure it was present
 #
-my $host = shift;
-
-if ( !$host )
+while ( my $host = shift )
 {
-    print "Usage: $0 hostname\n";
-    exit 1;
+    testHost($host);
 }
 
-#
-# Create a temporary file
-#
-my ( $fh, $tmp ) = tempfile();
 
-#
-# Connect to the remote host.
-#
-system("ssh -o PreferredAuthentications=none $host 2>$tmp >&2");
-
-#
-#  Now look for the output
-#
-open( my $handle, "<", $tmp ) or
-  die "Failed to open tmp file $!";
-
-while ( my $line = <$handle> )
+sub testHost
 {
-    if ( $line =~ /^permiss.*\(([^(]+)\)/i )
+    my ($host) = (@_);
+
+
+    #
+    # Create a temporary file
+    #
+    my ( $fh, $tmp ) = tempfile();
+
+    #
+    # Connect to the remote host.
+    #
+    system("ssh -o PreferredAuthentications=none $host 2>$tmp >&2");
+
+    #
+    #  Now look for the output
+    #
+    open( my $handle, "<", $tmp ) or
+      die "Failed to open tmp file $!";
+
+    while ( my $line = <$handle> )
     {
-        my $options = $1;
-        print join( " ", split( /,/, $options ) ) . "\n";
+        if ( $line =~ /^permiss.*\(([^(]+)\)/i )
+        {
+            my $options = $1;
+            print $host . ": " . join( " ", split( /,/, $options ) ) . "\n";
+        }
     }
+    close($handle);
+
+
+    unlink($tmp);
+
+
 }
-close($handle);
-
-
-unlink($tmp);
