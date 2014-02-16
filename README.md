@@ -218,6 +218,20 @@ Example:
 
 
 
+ssh-auth-types
+--------------
+
+Show the authentication types presented by a remote SSH server.
+
+Example:
+
+     $ ./ssh-auth-types precious
+     publickey password
+
+     $./ssh-auth-types ssh.example.com
+     publickey
+
+
 splay
 -----
 
