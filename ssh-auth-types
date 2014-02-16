@@ -1,0 +1,51 @@
+#!/usr/bin/perl
+#
+#  Detect the authentication types a remote host supports.
+#
+#
+
+use strict;
+use warnings;
+
+use File::Temp qw/ tempfile /;
+
+
+#
+# Get the host, and ensure it was present
+#
+my $host = shift;
+
+if ( !$host )
+{
+    print "Usage: $0 hostname\n";
+    exit 1;
+}
+
+#
+# Create a temporary file
+#
+my ( $fh, $tmp ) = tempfile();
+
+#
+# Connect to the remote host.
+#
+system("ssh -o PreferredAuthentications=none $host 2>$tmp >&2");
+
+#
+#  Now look for the output
+#
+open( my $handle, "<", $tmp ) or
+  die "Failed to open tmp file $!";
+
+while ( my $line = <$handle> )
+{
+    if ( $line =~ /^permiss.*\(([^(]+)\)/i )
+    {
+        my $options = $1;
+        print join( " ", split( /,/, $options ) ) . "\n";
+    }
+}
+close($handle);
+
+
+unlink($tmp);
