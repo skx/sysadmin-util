@@ -79,6 +79,29 @@ Example:
 
 
 
+graphite_send
+-------------
+
+A simple script to send a consistent set of metrics & values to a remote
+graphite instance.
+
+The metrics may be extended via small "plugins", which are nothing more
+than shell/perl/ruby/python scripts in a particular directory.
+
+Example:
+
+     graphite_send -v
+
+**NOTE** Some metrics will only be sent if the invoking user is root.
+
+Alternatives
+
+* [collectd](http://collectd.org/)
+* [diamond](https://github.com/BrightcoveOS/Diamond)
+* ..
+
+
+
 maybe
 -----
 
