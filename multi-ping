@@ -6,14 +6,14 @@ multi-ping - Multi-protocol ping wrapper
 
 =head1 SYNOPSIS
 
-  multi-ping hostname
+  multi-ping hostname1 hostname2 .. hostnameN
 
 =cut
 
 =head1 DESCRIPTION
 
-This wrapper script will invoke one of 'ping' or 'ping6', as appropriate, to test
-connectivity of a remote host, or your route to it.
+This wrapper script will invoke one of 'ping' or 'ping6', as appropriate,
+to test the connectivity of a remote host and your route to it.
 
 =cut
 
@@ -27,7 +27,7 @@ connectivity of a remote host, or your route to it.
 
 =head1 LICENSE
 
-Copyright (c) 2013 by Steve Kemp.  All rights reserved.
+Copyright (c) 2013-2014 by Steve Kemp.  All rights reserved.
 
 This script is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
@@ -43,62 +43,110 @@ use warnings;
 
 
 #
-#  The host to ping
-#
-my $HOST = shift;
-if ( !$HOST )
-{
-    print "Usage: multi-ping hostname\n";
-    exit(1);
-}
-
-
-#
 #  Check the dependencies.
 #
 checkSystem();
 
 #
-#  Lookup the IP for the name specified
+#  We could parse arguments here, for the moment we will hard-wire
+# a timeout of five seconds.
 #
-my $res = Net::DNS::Resolver->new;
-my $query = $res->query( $HOST, "ANY" );
+my $timeout = 5;
 
-if ($query)
+
+#
+# Process each hostname specified upon the command-line.
+#
+my $count = 0;
+while ( my $host = shift )
 {
-    foreach my $rr ( $query->answer )
-    {
-        if ( $rr->type eq "A" )
-        {
-            if ( system("ping -c 1 $HOST >/dev/null 2>/dev/null") == 0 )
-            {
-                print "Host $HOST - " . $rr->address() . " alive\n";
-            }
-            else
-            {
-                print "Host $HOST - " . $rr->address() . " FAILED\n";
-            }
-        }
-        elsif ( $rr->type eq "AAAA" )
-        {
-            if ( system("ping6 -c 1 $HOST >/dev/null 2>/dev/null") == 0 )
-            {
-                print "Host $HOST - " . $rr->address() . " alive\n";
-            }
-            else
-            {
-                print "Host $HOST - " . $rr->address() . " FAILED\n";
-            }
-        }
-    }
+    pingHost($host);
+    $count += 1;
 }
-else
+
+#
+# If we didn't get any arguments then we should complain.
+#
+if ( $count eq 0 )
 {
-    print "Failed to resolve $HOST\n";
+    print "Usage: multi-ping hostname1 hostname2 .. hostnameN\n";
     exit(1);
 }
 
 
+
+
+=begin doc
+
+Given a hostname lookup both the AAAA & A records.  For each result
+perform the appropriate ping request.
+
+=end doc
+
+=cut
+
+sub pingHost
+{
+    my ($hostname) = (@_);
+
+    #
+    #  Lookup the IP for the name specified
+    #
+    my $res = Net::DNS::Resolver->new;
+    my $query = $res->query( $hostname, "ANY" );
+
+    if ($query)
+    {
+        foreach my $rr ( $query->answer )
+        {
+
+            if ( $rr->type eq "A" )
+            {
+                if (
+                    system(
+                        "ping -c1 -w$timeout -W$timeout $hostname >/dev/null 2>/dev/null"
+                    ) == 0
+                   )
+                {
+                    print "Host $hostname - " . $rr->address() . " alive\n";
+                }
+                else
+                {
+                    print "Host $hostname - " . $rr->address() . " FAILED\n";
+                }
+            }
+            elsif ( $rr->type eq "AAAA" )
+            {
+                if (
+                    system(
+                        "ping6 -c1 -w$timeout -W$timeout $hostname >/dev/null 2>/dev/null"
+                    ) == 0
+                   )
+                {
+                    print "Host $hostname - " . $rr->address() . " alive\n";
+                }
+                else
+                {
+                    print "Host $hostname - " . $rr->address() . " FAILED\n";
+                }
+            }
+        }
+    }
+    else
+    {
+        print "WARNING: Failed to resolve $hostname\n";
+    }
+}
+
+
+
+=begin doc
+
+Test that we have the required perl dependencies present.
+
+=end doc
+
+=cut
 
 sub checkSystem
 {
@@ -113,7 +161,7 @@ sub checkSystem
     #
     if ($@)
     {
-        print "Mising Net::DNS module\n";
+        print "The required Net::DNS module is missing.  Aborting.\n";
         exit(1);
     }
 
