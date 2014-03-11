@@ -6,10 +6,10 @@
  *
  * Options:
  *
- *   --all    Show all familes.
- *   --ipv4   Show IPv4.
- *   --ipv6   Show IPv6.
- *   --device Show only the given device.
+ *   --all      Show all families.
+ *   --ipv4     Show IPv4 addresses.
+ *   --ipv6     Show IPv6 addresses.
+ *   --device   Show only the given device.
  *
  * Examples:
  *
@@ -21,7 +21,7 @@
  *  eth0 192.168.0.3
  *  lo ::1
  *  eth0 fe80::62a4:4cff:fe2d:fab9
- *  teredo 2001:0:53aa:64c:301f:13f3:4fe4:3a0b
+ *  teredo 2001:0:53ba:64c:301f:13f3:4fe4:3a0b
  *  teredo fe80::ffff:ffff:ffff
  *
  */
@@ -51,8 +51,8 @@ int main (int argc, char * argv[])
     {
         static struct option long_options[] =
             {
-                {"device", required_argument, 0, 'd'},
                 {"all",    no_argument, 0, 'a'},
+                {"device", required_argument, 0, 'd'},
                 {"ipv4",   no_argument, 0, '4'},
                 {"ipv6",   no_argument, 0, '6'},
                 {0, 0, 0, 0}
@@ -61,7 +61,7 @@ int main (int argc, char * argv[])
         /* getopt_long stores the option index here. */
         int option_index = 0;
 
-        c = getopt_long(argc, argv, "d:a46", long_options, &option_index);
+        c = getopt_long(argc, argv, "ad:46", long_options, &option_index);
 
         /* Detect the end of the options. */
         if (c == -1)
