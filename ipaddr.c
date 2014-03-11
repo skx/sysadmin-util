@@ -2,7 +2,7 @@
  * ipaddr - Show the IP addresses associated with given devices.
  *
  * Usage:
- *   ips [options]
+ *   ipaddr [options]
  *
  * Options:
  *
@@ -13,10 +13,10 @@
  *
  * Examples:
  *
- *  $ ips -d eth0 -4
+ *  $ ipaddr -d eth0 -4
  *  eth0 192.168.0.3
  *
- *  $ ips -a
+ *  $ ipaddr -a
  *  lo 127.0.0.1
  *  eth0 192.168.0.3
  *  lo ::1
