@@ -24,8 +24,17 @@
 name=$1
 
 if [ -z "$name" ]; then
-   echo "Usage: $0 some.host.name"
+   echo "Usage: $0 some.host.name [portnumber|servicename]"
    exit 3
+fi
+
+#
+#  Get ssl port or set default to https
+#
+port=${2}
+
+if [ -z "$port" ]; then
+   port=443
 fi
 
 
@@ -55,8 +64,8 @@ fi
 #
 #  Download the certificate
 #
-if ( ! echo "" | openssl s_client -connect $name:443 > $tmp 2>/dev/null ); then
-   echo "Failed to get cert from https://$name:443/"
+if ( ! echo "" | openssl s_client -connect $name:$port > $tmp 2>/dev/null ); then
+   echo "Failed to get cert from https://$name:$port/"
    exit 3
 fi
 
