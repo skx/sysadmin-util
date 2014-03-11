@@ -17,6 +17,9 @@ nop:
 	@echo "make tidy   - Run the perl code through perltidy."
 	@echo ""
 
+build:
+	gcc -o ipaddr ipaddr.c -Wall -Werror
+
 clean:
 	rm *.bak *~ || true
 

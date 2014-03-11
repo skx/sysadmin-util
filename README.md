@@ -104,6 +104,32 @@ Alternatives
 * ..
 
 
+ipaddr
+------
+
+Get IP addresses easily, either all IPs, all those which are IPv4/IPv6, or
+those for a device.  Designed primarily for scripting.
+
+Example:
+
+      $ ./ips -4
+      lo 127.0.0.1
+      eth0 80.68.84.102
+      eth0 80.68.84.104
+
+Or to see all IPv6 addreses on eth0:
+
+      $ ipaddr -6 -d eth0
+      eth0 2001:41c8:10b:102::10
+      eth0 fe80::216:3eff:fe08:16a4
+
+**NOTE** Requires compilation via `make build`.
+
+Alternatives:
+
+* `ip -[46] addr  show`
+* `ifconfig -a`
+
 
 maybe
 -----
