@@ -1,12 +1,15 @@
 sysadmin-utils
 ==============
 
-A small collection of scripts that might be useful to sysadmins.
+This repository contains a small collection of scripts that might be
+useful to sysadmins.
 
 Contributions of new scripts are very welcome, as are suggestions for
-things to install.
+things to add or include:
 
-I have a preference for Perl, but that does not rule out code that
+* Distribution-specific tools for modifying Debian Packages, RPMs, or similar are probably best avoided.
+* Scripts with lots of dependencies should be avoided, unless they degrade or fail gracefully.
+* I have a preference for Perl, but that does not not rule out code that
 needs to be compiled, or code in other scripting languages (Python,
 Ruby, etc).
 
@@ -325,7 +328,7 @@ Trivial (ba)sh alternatives:
 
 
 when-up
-----------
+-------
 
 Waits until a given host is online (determined by ping until executing a given command
 
@@ -373,8 +376,8 @@ be executed and the current User-ID.
 
 Existing alternatives:
 
- * lckdo - Requires you to build your own lockfile name
- * flock - Requires you to build your own lockfile name
+ * lckdo - Requires you to build your own lockfile name.
+ * flock - Requires you to build your own lockfile name.
 
 
 
