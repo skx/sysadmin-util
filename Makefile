@@ -17,11 +17,11 @@ nop:
 	@echo "make tidy   - Run the perl code through perltidy."
 	@echo ""
 
-build:
+build: ipaddr.c
 	gcc -o ipaddr ipaddr.c -Wall -Werror
 
 clean:
-	rm *.bak *~ || true
+	rm ipaddr *.bak *~ || true
 
 critic:
 	perlcritic $$(grep -l '^#!/usr/bin/perl' *)
