@@ -296,12 +296,12 @@ fi
 ## upgrades.
 ##
 if ( which dpkg >/dev/null 2>/dev/null ); then
-    packages=$(dpkg --list |grep ^ii | wc -l)
+    packages=$(dpkg --list 2>/dev/null | grep ^ii | wc -l)
     send "$host.packages.installed $packages $time"
 fi
 if ( which apt-get >/dev/null 2>/dev/null ); then
     if [ "$root"  = "1" ]; then
-        pending=$(apt-get upgrade --simulate | grep ^Inst | wc -l )
+        pending=$(apt-get upgrade --simulate 2>/dev/null | grep ^Inst | wc -l )
         send "$host.packages.pending-updates $pending $time"
     fi
 fi
