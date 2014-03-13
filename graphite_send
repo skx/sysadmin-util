@@ -245,7 +245,7 @@ fi
 ## Number of login sessions
 ##
 if ( which w >/dev/null 2>/dev/null ); then
-    users=$(w --no-header | wc -l)
+    users=$(w -h | wc -l)
     send "$host.users $users $time"
 fi
 
