@@ -146,7 +146,7 @@ send()
     # If we have nc then send the data, otherwise alert the user.
     #
     if ( which nc >/dev/null 2>/dev/null ); then
-        echo $1 | nc $HOST $PORT --send-only -w "$TIMEOUT" -t "$TIMEOUT"
+        echo $1 | nc $HOST $PORT --send-only -w "$TIMEOUT" -t "$TIMEOUT" 2>/dev/null
     else
         echo "nc (netcat) is not present.  Aborting"
     fi
