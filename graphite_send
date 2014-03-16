@@ -71,15 +71,23 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 export PATH
 
 
+#
+# The default timeout period
+#
+TIMEOUT=5
+
 
 #
 # Read any options from the command-line.
 #
-while getopts hnv name
+while getopts hnvt: name
 do
     case $name in
         v)
             VERBOSE=1
+            ;;
+        t)
+            TIMEOUT=$OPTARG
             ;;
         n)
             NOP=1
@@ -94,6 +102,7 @@ Valid options are:
 
  -h   Show help.
  -n   no-operation, don't actually send any data.  (Useful with -v.)
+ -t N Set the timeout to N-seconds when invoking netcat. (Default: 5)
  -v   Be verbose, and show the data which is to be sent.
 END
         exit 0
@@ -137,7 +146,7 @@ send()
     # If we have nc then send the data, otherwise alert the user.
     #
     if ( which nc >/dev/null 2>/dev/null ); then
-        echo $1 | nc $HOST $PORT --send-only -w1 -t1
+        echo $1 | nc $HOST $PORT --send-only -w "$TIMEOUT" -t "$TIMEOUT"
     else
         echo "nc (netcat) is not present.  Aborting"
     fi
