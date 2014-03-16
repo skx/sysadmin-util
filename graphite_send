@@ -167,6 +167,11 @@ if [ -z "$HOSTNAME" ]; then
     host=$(hostname --short)
 fi
 
+#
+#  Make sure it is unqualified.
+#
+host=$(echo $host | awk -F. '{print $1}')
+
 
 #
 # Are we root?  Some metrics will care
