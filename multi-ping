@@ -6,7 +6,7 @@ multi-ping - Multi-protocol ping wrapper
 
 =head1 SYNOPSIS
 
-  multi-ping hostname1 hostname2 .. hostnameN
+  multi-ping [--loop|--forever]  hostname1 hostname2 .. hostnameN
 
 =cut
 
@@ -40,12 +40,20 @@ The LICENSE file contains the full text of the license.
 use strict;
 use warnings;
 
+use Getopt::Long;
+use Pod::Usage;
 
 
 #
 #  Check the dependencies.
 #
 checkSystem();
+
+#
+#  Parse the command-line.
+#
+my %config = parsedOptions();
+
 
 #
 #  We could parse arguments here, for the moment we will hard-wire
@@ -55,23 +63,28 @@ my $timeout = 5;
 
 
 #
-# Process each hostname specified upon the command-line.
-#
-my $count = 0;
-while ( my $host = shift )
-{
-    pingHost($host);
-    $count += 1;
-}
-
-#
 # If we didn't get any arguments then we should complain.
 #
-if ( $count eq 0 )
+if ( scalar @ARGV < 1 )
 {
     print "Usage: multi-ping hostname1 hostname2 .. hostnameN\n";
     exit(1);
 }
+
+
+#
+# Process each hostname specified upon the command-line.
+#
+# Looping if applicable.
+#
+do
+{
+    foreach my $host (@ARGV)
+    {
+        pingHost($host);
+    }
+    sleep 1;
+} until ( !$config{ 'loop' } );
 
 
 
@@ -114,32 +127,27 @@ sub pingHost
 
     if ($query)
     {
-        while (1)
+        foreach my $rr ( $query->answer )
         {
-            foreach my $rr ( $query->answer )
+            my $ping_binary =
+              $rr->type eq "A"    ? "ping" :
+              $rr->type eq "AAAA" ? "ping6" :
+                                    "";
+            if ($ping_binary)
             {
-                my $ping_binary =
-                  $rr->type eq "A"    ? "ping" :
-                  $rr->type eq "AAAA" ? "ping6" :
-                                        "";
-                if ($ping_binary)
+                if (
+                    system(
+                        "$ping_binary -c1 -w$timeout -W$timeout $hostname >/dev/null 2>/dev/null"
+                    ) == 0
+                   )
                 {
-                    if (
-                        system(
-                            "$ping_binary -c1 -w$timeout -W$timeout $hostname >/dev/null 2>/dev/null"
-                        ) == 0
-                       )
-                    {
-                        print "Host $hostname - " . $rr->address() . " alive\n";
-                    }
-                    else
-                    {
-                        print "Host $hostname - " . $rr->address() .
-                          " FAILED\n";
-                    }
+                    print "Host $hostname - " . $rr->address() . " alive\n";
+                }
+                else
+                {
+                    print "Host $hostname - " . $rr->address() . " FAILED\n";
                 }
             }
-            sleep 1;
         }
     }
     else
@@ -174,5 +182,34 @@ sub checkSystem
         print "The required Net::DNS module is missing.  Aborting.\n";
         exit(1);
     }
+
+}
+
+
+
+=begin doc
+
+Parse the options and return suitable values.
+
+=end doc
+
+=cut
+
+sub parsedOptions
+{
+    my %vars;
+    $vars{ 'loop' } = 0;
+
+    exit
+      if (
+           !GetOptions( "help"    => \$vars{ 'help' },
+                        "verbose" => \$vars{ 'verbose' },
+                        "forever" => \$vars{ 'loop' },
+                        "loop"    => \$vars{ 'loop' },
+                      ) );
+
+    pod2usage(1) if ( $vars{ 'help' } );
+
+    return (%vars);
 
 }
