@@ -114,11 +114,16 @@ sub pingHost
 
     if ($query)
     {
-	while (1) {
+        while (1)
+        {
             foreach my $rr ( $query->answer )
             {
-                my $ping_binary = $rr->type eq "A" ? "ping" : $rr->type eq "AAAA" ? "ping6" : "";
-                if ($ping_binary) {
+                my $ping_binary =
+                  $rr->type eq "A"    ? "ping" :
+                  $rr->type eq "AAAA" ? "ping6" :
+                                        "";
+                if ($ping_binary)
+                {
                     if (
                         system(
                             "$ping_binary -c1 -w$timeout -W$timeout $hostname >/dev/null 2>/dev/null"
@@ -129,7 +134,8 @@ sub pingHost
                     }
                     else
                     {
-                        print "Host $hostname - " . $rr->address() . " FAILED\n";
+                        print "Host $hostname - " . $rr->address() .
+                          " FAILED\n";
                     }
                 }
             }
