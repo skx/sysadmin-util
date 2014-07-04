@@ -125,36 +125,41 @@ sub pingHost
     #  Lookup the IP for the name specified
     #
     my $res = Net::DNS::Resolver->new;
-    my $query = $res->query( $hostname, "ANY" );
 
-    if ($query)
+    #
+    #  The two types we'll lookup.
+    #
+    #  NOTE: This shouldn't be required but my laptop resolver seems to
+    # struggle with lookups of the type "ANY".  Sigh.
+    #
+    #
+    foreach my $type (qw! A AAAA !)
     {
-        foreach my $rr ( $query->answer )
+        my $query = $res->query( $hostname, $type );
+
+        if ($query)
         {
-            my $ping_binary =
-              $rr->type eq "A"    ? "ping" :
-              $rr->type eq "AAAA" ? "ping6" :
-                                    "";
-            if ($ping_binary)
+            foreach my $rr ( $query->answer )
             {
-                if (
-                    system(
+                my $ping_binary =
+                  $rr->type eq "A"    ? "ping" :
+                  $rr->type eq "AAAA" ? "ping6" :
+                                        "";
+                if ($ping_binary)
+                {
+                    my $result = system(
                         "$ping_binary -c1 -w$timeout -W$timeout $hostname >/dev/null 2>/dev/null"
-                    ) == 0
-                   )
-                {
-                    print "Host $hostname - " . $rr->address() . " alive\n";
-                }
-                else
-                {
-                    print "Host $hostname - " . $rr->address() . " FAILED\n";
+                    );
+
+                    print "Host $hostname - " . $rr->address() .
+                      ( ( $result == 0 ) ? " - alive" : " - FAILED"  ) . "\n";
                 }
             }
         }
-    }
-    else
-    {
-        print "WARNING: Failed to resolve $hostname\n";
+        else
+        {
+            print "WARNING: Failed to resolve $hostname [$type]\n";
+        }
     }
 }
 
