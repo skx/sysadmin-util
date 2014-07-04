@@ -6,7 +6,7 @@ multi-ping - Multi-protocol ping wrapper
 
 =head1 SYNOPSIS
 
-  multi-ping [--loop|--forever]  hostname1 hostname2 .. hostnameN
+  multi-ping [--loop|--forever] [--sleep=N]  hostname1 hostname2 .. hostnameN
 
 =cut
 
@@ -83,7 +83,9 @@ do
     {
         pingHost($host);
     }
-    sleep 1;
+
+    sleep( $config{ 'sleep' } );
+
 } until ( !$config{ 'loop' } );
 
 
@@ -198,7 +200,12 @@ Parse the options and return suitable values.
 sub parsedOptions
 {
     my %vars;
-    $vars{ 'loop' } = 0;
+
+    #
+    # Defaults
+    #
+    $vars{ 'loop' }  = 0;
+    $vars{ 'sleep' } = 1;
 
     exit
       if (
@@ -206,6 +213,7 @@ sub parsedOptions
                         "verbose" => \$vars{ 'verbose' },
                         "forever" => \$vars{ 'loop' },
                         "loop"    => \$vars{ 'loop' },
+                        "sleep=i" => \$vars{ 'sleep' },
                       ) );
 
     pod2usage(1) if ( $vars{ 'help' } );
