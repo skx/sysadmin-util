@@ -90,6 +90,23 @@ sub pingHost
     my ($hostname) = (@_);
 
     #
+    #  If we've been given an URI then we'll remove the leading-scheme
+    # and use the hostname only.
+    #
+    if ( $hostname =~ m!^([a-z]+:\/\/)([^/]+)/?!i )
+    {
+        $hostname = $2;
+
+        #
+        #  Port might be specified too, drop that if present.
+        #
+        if ( $hostname =~ /^(.*):([0-9]+)$/ )
+        {
+            $hostname = $1;
+        }
+    }
+
+    #
     #  Lookup the IP for the name specified
     #
     my $res = Net::DNS::Resolver->new;
