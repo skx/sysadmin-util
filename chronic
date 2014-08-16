@@ -43,34 +43,39 @@ eval("use IPC::Run");
 #
 #  Abort if we failed to load IPC.
 #
-if ( $@ )
+if ($@)
 {
     warn "Failed to load IPC::Run";
     exec(@ARGV);
 }
 
-if (! @ARGV) {
-	die "usage: chronic COMMAND...\n";
+if ( !@ARGV )
+{
+    die "usage: chronic COMMAND...\n";
 }
 
-my ($out, $err);
+my ( $out, $err );
 my $h = IPC::Run::start( \@ARGV, \*STDIN, \$out, \$err );
 $h->finish;
-my $ret=$h->full_result;
+my $ret = $h->full_result;
 
-if ($ret >> 8) { # child failed
-	showout();
-	exit ($ret >> 8);
+if ( $ret >> 8 )
+{    # child failed
+    showout();
+    exit( $ret >> 8 );
 }
-elsif ($ret != 0) { # child killed by signal
-	showout();
-	exit 1;
+elsif ( $ret != 0 )
+{    # child killed by signal
+    showout();
+    exit 1;
 }
-else {
-	exit 0;
+else
+{
+    exit 0;
 }
 
-sub showout {
-	print STDOUT $out;
-	print STDERR $err;
+sub showout
+{
+    print STDOUT $out;
+    print STDERR $err;
 }
