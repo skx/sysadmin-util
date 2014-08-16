@@ -34,14 +34,27 @@ Licensed under the GNU GPL version 2 or higher.
 
 use warnings;
 use strict;
-use IPC::Run qw( start pump finish timeout );
+
+
+## no critic (Eval)
+eval("use IPC::Run");
+## use critic
+
+#
+#  Abort if we failed to load IPC.
+#
+if ( $@ )
+{
+    warn "Failed to load IPC::Run";
+    exec(@ARGV);
+}
 
 if (! @ARGV) {
 	die "usage: chronic COMMAND...\n";
 }
 
 my ($out, $err);
-my $h = IPC::Run::start \@ARGV, \*STDIN, \$out, \$err;
+my $h = IPC::Run::start( \@ARGV, \*STDIN, \$out, \$err );
 $h->finish;
 my $ret=$h->full_result;
 
