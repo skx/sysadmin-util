@@ -1,0 +1,63 @@
+#!/usr/bin/perl
+
+=head1 NAME
+
+chronic - runs a command quietly unless it fails
+
+=head1 SYNOPSIS
+
+chronic COMMAND...
+
+=head1 DESCRIPTION
+
+chronic runs a command, and arranges for its standard out and standard
+error to only be displayed if the command fails (exits nonzero or crashes).
+If the command succeeds, any extraneous output will be hidden.
+
+A common use for chronic is for running a cron job. Rather than
+trying to keep the command quiet, and having to deal with mails containing
+accidental output when it succeeds, and not verbose enough output when it
+fails, you can just run it verbosely always, and use chronic to hide
+the successful output.
+
+	0 1 * * * chronic backup # instead of backup >/dev/null 2>&1
+
+=head1 AUTHOR
+
+Copyright 2010 by Joey Hess <joey@kitenet.net>
+
+Original concept and "chronic" name by Chuck Houpt.
+
+Licensed under the GNU GPL version 2 or higher.
+
+=cut
+
+use warnings;
+use strict;
+use IPC::Run qw( start pump finish timeout );
+
+if (! @ARGV) {
+	die "usage: chronic COMMAND...\n";
+}
+
+my ($out, $err);
+my $h = IPC::Run::start \@ARGV, \*STDIN, \$out, \$err;
+$h->finish;
+my $ret=$h->full_result;
+
+if ($ret >> 8) { # child failed
+	showout();
+	exit ($ret >> 8);
+}
+elsif ($ret != 0) { # child killed by signal
+	showout();
+	exit 1;
+}
+else {
+	exit 0;
+}
+
+sub showout {
+	print STDOUT $out;
+	print STDERR $err;
+}
