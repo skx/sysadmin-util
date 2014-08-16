@@ -31,6 +31,22 @@ Alternatives:
 
 
 
+chronic
+-------
+
+Run a command, hiding STDOUT and STDERR if it completes successfully.
+
+Example:
+
+     ./chronic cp /etc/passwd /tmp/not/found
+
+This is designed to be used for cron-jobs, where output is generally
+ignored in the case of success.
+
+This was written by Joey Hess and is part of [moreutils](https://joeyh.name/code/moreutils/).
+
+
+
 cidr2ip
 -------
 
