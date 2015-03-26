@@ -175,7 +175,7 @@ Example:
      Host steve.org.uk - 80.68.85.46 alive
      Host steve.org.uk - 2001:41c8:125:46:0:0:0:10 alive
 
-As a convienence you may also specify URIs as arguments, for example:
+As a convenience you may also specify URIs as arguments, for example:
 
      $ multi-ping http://steve.org.uk/foo/bar
      Host steve.org.uk - 80.68.85.46 alive
