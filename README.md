@@ -378,7 +378,7 @@ Trivial (ba)sh alternatives:
 when-up
 -------
 
-Waits until a given host is online (determined by ping until executing a given command
+Waits until a given host is online
 
 Example:
 
@@ -390,6 +390,18 @@ Example:
 Alternatives:
 
 * `until-success ping -c 1 1.2.3.4; ssh user@1.2.3.4`
+
+
+when-down
+-------
+
+Waits until a given host is down
+
+Example:
+
+     $ ./when-down 1.2.3.4 echo "down"
+     Waiting for 1.2.3.4 to get down...
+     down
 
 
 
