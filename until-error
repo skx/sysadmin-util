@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# About
+# -----
+# Repeat the command until it fails
+#
+
+"$@"
+
+#
+#  If the status code was zero then repeat.
+#
+while [ $? -eq 0 ]; do
+    "$@"
+done
+
+

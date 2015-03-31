@@ -392,6 +392,24 @@ Alternatives:
 * `until-success ping -c 1 1.2.3.4; ssh user@1.2.3.4`
 
 
+
+until-error
+-------------
+
+Repeat the specific command until it fails - run at least once
+always.
+
+Example:
+
+         ./until-error ssh example.com -l root -i ~/.ssh/example.com.key
+
+Trivial (ba)sh alternatives:
+
+* while true ; do $cmd; done
+* watch -n 2 $cmd
+
+
+
 when-down
 -------
 
@@ -402,6 +420,10 @@ Example:
      $ ./when-down 1.2.3.4 echo "down"
      Waiting for 1.2.3.4 to get down...
      down
+
+Alternatives:
+
+* `until-error ping -c 1 -W 1 1.2.3.4; echo "down"`
 
 
 
