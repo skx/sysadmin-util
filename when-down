@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# Wait until a given host is down (determined by ping) then execute the
+# given command
+#
+# Usage:
+# ./when-down HOST COMMAND...
+#
+# Example
+# ./when-down 1.2.3.4 ssh 1.2.3.4
+#
+
+
+#
+#  Ensure we received the correct number of arguments.
+#
+if [ $# -lt 2 ]; then
+    echo "Usage: when-down HOST COMMAND..."
+    exit 1
+fi
+
+HOST=$1
+
+echo "Waiting for $HOST to get down..."
+
+true
+while [ $? -ne 1 ]; do
+    ping -c 1 -W 1 $HOST >/dev/null
+done
+
+shift
+$*
