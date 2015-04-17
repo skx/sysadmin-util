@@ -2,7 +2,7 @@
 #
 # About
 # -----
-# Repeat the command until it fails
+# Repeat the command until it fails - always run at least once.
 #
 
 "$@"
