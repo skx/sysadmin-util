@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 #
 # maybe - companion to /usr/bin/true and /usr/bin/false.
 #

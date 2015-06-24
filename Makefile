@@ -24,8 +24,8 @@ clean:
 	rm ipaddr *.bak *~ || true
 
 critic:
-	perlcritic $$(grep -l '^#!/usr/bin/perl' *)
+	perlcritic $$(grep -l '^#!/usr/bin/env perl' *)
 
 tidy:
-	perltidy $$(grep -l '^#!/usr/bin/perl' *)
+	perltidy $$(grep -l '^#!/usr/bin/env perl' *)
 
