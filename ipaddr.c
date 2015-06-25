@@ -28,6 +28,7 @@
 
 #include <stdio.h>
 #include <sys/types.h>
+#include <sys/socket.h>
 #include <ifaddrs.h>
 #include <netinet/in.h>
 #include <string.h>
