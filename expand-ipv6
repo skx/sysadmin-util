@@ -11,7 +11,9 @@ expand-ipv6 - Expand IPv6 addresses to their full width.
   Command-Line Options:
 
    --bare   Don't show the colons in the output.
+   --lower  Show all alphabetical characters in lower-case.
    --help   Show the help-information for this script.
+   --upper  Show all alphabetical characters in upper-case.
 
 =cut
 
@@ -74,6 +76,9 @@ while ( my $addr = shift )
     {
         $expanded =~ s/://g;
     }
+
+    $expanded = lc($expanded) if ( $config{'lc'} ) ;
+    $expanded = uc($expanded) if ( $config{'uc'} ) ;
 
     # Show the necessary.
     print $expanded . "\n";
@@ -151,9 +156,15 @@ sub parsedOptions
     exit
       if (
            !GetOptions( "help" => \$vars{ 'help' },
-                        "bare" => \$vars{ 'bare' }, ) );
+                        "bare" => \$vars{ 'bare' },
+                        "lower" => \$vars{ 'lc' },
+                        "upper" => \$vars{ 'uc' },
+                    ) );
 
     pod2usage(1) if ( $vars{ 'help' } );
+
+    # If we have no default use lower-case
+    $vars{'lc'} = 1 unless( $vars{'lc'} || $vars{'uc'} );
 
     return (%vars);
 
