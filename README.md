@@ -390,7 +390,7 @@ Trivial (ba)sh alternatives:
 when-up
 -------
 
-Waits until a given host is online (determined by ping until executing a given command)
+Waits until a given host is online, determined by ping, until executing a given command.
 
 Example:
 
