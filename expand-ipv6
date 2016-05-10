@@ -1,0 +1,160 @@
+#!/usr/bin/env perl
+
+=head1 NAME
+
+expand-ipv6 - Expand IPv6 addresses to their full width.
+
+=head1 SYNOPSIS
+
+  expand-ipv6 [options] address1 .. addressN
+
+  Command-Line Options:
+
+   --bare   Don't show the colons in the output.
+   --help   Show the help-information for this script.
+
+=cut
+
+=head1 DESCRIPTION
+
+This script will expand each specified IPv6 address into the full-form,
+this is useful if you're trying to setup DNS-entries, etc.
+
+=cut
+
+=head1 AUTHOR
+
+ Steve
+ --
+ http://www.steve.org.uk/
+
+=cut
+
+=head1 LICENSE
+
+Copyright (c) 2016 by Steve Kemp.  All rights reserved.
+
+This script is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
+
+The LICENSE file contains the full text of the license.
+
+=cut
+
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+use Pod::Usage;
+
+
+#
+#  Parse any command-line options which are present.
+#
+my %config = parsedOptions();
+
+#
+#  Count of addreseses we've expanded
+#
+my $count = 0;
+
+#
+#  Process every argument.
+#
+while ( my $addr = shift )
+{
+    $count += 1;
+
+    # Expand the IP-address
+    my $expanded = expand($addr);
+
+    # If we're not supposed to show the colons then remove them.
+    if ( $config{ 'bare' } )
+    {
+        $expanded =~ s/://g;
+    }
+
+    # Show the necessary.
+    print $expanded . "\n";
+}
+
+#
+#  Exit cleanly if we received an argument.
+#
+exit( $count > 0 ? 0 : 1 );
+
+
+
+
+=begin doc
+
+Expand the specified IPv6 address.
+
+=end doc
+
+=cut
+
+sub expand
+{
+    my ($arg) = (@_);
+
+    # Sanity-check our argument.
+    die "Missing address" unless $arg;
+    die "Invalid address" unless ( $arg =~ /^([a-f0-9:]+)$/i );
+
+    # Temporary value
+    my @tmp;
+
+    # Parts of the address we were given
+    my @parts = split( ':', $arg );
+
+    # Process each part.
+    for my $part (@parts)
+    {
+        if ( length($part) )
+        {
+            push( @tmp, substr( "0000$part", -4 ) );
+        }
+        else
+        {
+            for my $i ( 1 .. ( 8 - int(@parts) ) )
+            {
+                push( @tmp, "0000" );
+            }
+        }
+    }
+    return join( ":", @tmp );
+}
+
+
+
+
+=begin doc
+
+Parse any specified options and return suitable values.
+
+=end doc
+
+=cut
+
+sub parsedOptions
+{
+    my %vars;
+
+    #
+    # Defaults - Bare here means without the colons.  Useful for DNS
+    # if you're using TinyDNS, dns-api.com, or similar service.
+    #
+    $vars{ 'bare' } = 0;
+
+    exit
+      if (
+           !GetOptions( "help" => \$vars{ 'help' },
+                        "bare" => \$vars{ 'bare' }, ) );
+
+    pod2usage(1) if ( $vars{ 'help' } );
+
+    return (%vars);
+
+}

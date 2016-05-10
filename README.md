@@ -98,6 +98,24 @@ Example:
 
 
 
+expand-ipv6
+-----------
+
+Expand an abbreviated/compressed IPv6 address to the full-form.
+
+Example:
+
+     ./expand-ipv6 fe80::1 2001:41c8:10b:103::111
+     fe80:0000:0000:0000:0000:0000:0001
+     2001:41c8:010b:0103:0000:0000:0111
+
+Alternatives:
+
+* `sipcalc`
+* ...
+
+
+
 graphite_send
 -------------
 
