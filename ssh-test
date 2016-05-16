@@ -31,7 +31,7 @@ EOF
 # Command line options and arguments parsing
 #
 
-while getopts :u:h opt; do
+while getopts :h opt; do
     case $opt in
         h)      usage_and_exit
                 ;;
