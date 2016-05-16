@@ -52,8 +52,8 @@ fi
 #
 
 longest_hostname=0
-for h in $(cat $1); do
-    length=${#h}
+for line in $(cat $1); do
+    length=${#line}
     [ $length -gt $longest_hostname ] && longest_hostname=$length
 done
 
