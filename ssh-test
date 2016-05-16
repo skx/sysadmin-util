@@ -60,9 +60,14 @@ done
 RED='\033[1;31m'
 NC='\033[0m' # No Color
 
-for h in $(cat $1); do 
-    printf "%${longest_hostname}s ... " $h
-    if ssh -q -o BatchMode=yes -o ConnectTimeout=3 $h exit 2>/dev/null; then
+for line in $(cat $1); do
+	host=${line%:*}
+	port=${line#*:}
+    if [ ! -z "${port##*[!0-9]*}" ]; then
+        portarg="-p $port"
+    fi
+    printf "%${longest_hostname}s ... " $line
+    if ssh -q -o BatchMode=yes -o ConnectTimeout=3 $portarg $host exit 2>/dev/null; then
         echo "OK"
     else
         printf "${RED}FAIL${NC}\n"
