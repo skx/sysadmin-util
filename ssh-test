@@ -51,8 +51,10 @@ fi
 # MAIN
 #
 
+
+# Calculate the longest hostname, to align columns if we can.
 longest_hostname=0
-for line in $(cat $1); do
+for line in $(cat "$1"); do
     length=${#line}
     [ $length -gt $longest_hostname ] && longest_hostname=$length
 done
@@ -60,7 +62,7 @@ done
 RED='\033[1;31m'
 NC='\033[0m' # No Color
 
-for line in $(cat $1); do
+for line in $(cat "$1"); do
 	host=${line%:*}
 	port=${line#*:}
     if [ ! -z "${port##*[!0-9]*}" ]; then
