@@ -51,11 +51,17 @@ fi
 # MAIN
 #
 
+longest_hostname=0
+for h in $(cat $1); do
+    length=${#h}
+    [ $length -gt $longest_hostname ] && longest_hostname=$length
+done
+
 RED='\033[1;31m'
 NC='\033[0m' # No Color
 
 for h in $(cat $1); do 
-    printf "%30s ... " $h
+    printf "%${longest_hostname}s ... " $h
     if ssh -q -o BatchMode=yes -o ConnectTimeout=3 $h exit 2>/dev/null; then
         echo "OK"
     else
