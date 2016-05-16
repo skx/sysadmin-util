@@ -324,6 +324,32 @@ Example:
      publickey
 
 
+
+ssh-test
+--------
+
+Test whether `ssh` connections to a list of hosts will succeed, by testing
+each in order.
+
+Example:
+
+     $ ./ssh-test host.list.txt
+     ssh.steve.org.uk    ... OK
+     www.steve.org.uk    ... OK
+     foo.example.com:222 ... OK
+
+     $ cat host.list.txt
+     ssh.steve.org.uk
+     www.steve.org.uk
+     foo.example.com:222
+
+The format of the input-file is:
+
+    [user@]hostname1[:port]
+    [user@]hostname2[:port]
+    ..
+
+
 splay
 -----
 
