@@ -168,7 +168,7 @@ Alternatives:
 maybe
 -----
 
-In a similar vain to `true` and `false` the `maybe` command exits with
+In a similar vein to `true` and `false` the `maybe` command exits with
 a status code of zero or one, depending on a random number.
 
 It can be useful in scripts which need to test-failures, or which benefit
