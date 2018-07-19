@@ -9,7 +9,7 @@ things to add or include:
 
 * Distribution-specific tools for modifying Debian Packages, RPMs, or similar are probably best avoided.
 * Scripts with lots of dependencies should be avoided, unless they degrade or fail gracefully.
-* I have a preference for Perl, but that does not not rule out code that
+* I have a preference for Perl, but that does not rule out code that
 needs to be compiled, or code in other scripting languages (Python,
 Ruby, etc).
 
