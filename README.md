@@ -264,7 +264,7 @@ Example:
 or
 
      $ ./pyhttpd 8080
-     Serving HTTP on 127.0.0.1 port 8080 ...
+     Serving HTTP on 0.0.0.0 port 8080 ...
 
 
 
