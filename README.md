@@ -259,7 +259,7 @@ to arbitrary IP addresses, specifically to allow you to bind to localhost.
 Example:
 
      $ ./pyhttpd 127.0.0.1:8080
-     Serving HTTP on 0.0.0.0 port 8080 ...
+     Serving HTTP on 127.0.0.1 port 8080 ...
 
 or
 
