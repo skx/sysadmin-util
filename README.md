@@ -308,6 +308,10 @@ Example:
        $ ./since /var/log/messages
        Apr 20 11:24:37 precious skx: testing the log
 
+Existing alternatives:
+
+* logtail
+
 
 
 ssh-auth-types
