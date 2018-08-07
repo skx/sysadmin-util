@@ -1,0 +1,92 @@
+#!/usr/bin/env perl
+
+=head1 NAME
+
+collapse - Remove blank-lines, collapsing whitespace.
+
+=cut
+
+=head1 SYNOPSIS
+
+  General Options:
+
+   --help      Show the help information for this script.
+   --verbose   Show useful debugging information.
+
+=cut
+
+
+=head1 ABOUT
+
+This simple utility script removes blank lines, and lines containing whitespace
+from the given files, or STDIN.
+
+The script is designed to be operated as a pipe, rather than upon files, but
+despite that it might be useful.
+
+=cut
+
+=head1 AUTHOR
+
+ Steve
+ --
+ http://www.steve.org.uk/
+
+=cut
+
+
+=head1 LICENSE
+
+Copyright (c) 2018 by Steve Kemp.  All rights reserved.
+
+This script is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
+
+The LICENSE file contains the full text of the license.
+
+=cut
+
+
+use strict;
+use warnings;
+use Getopt::Long;
+use Pod::Usage;
+
+
+#
+#  Get the options, either defaults or from the command line.
+#
+my %config = parsedOptions();
+
+#
+#  Run the action.
+#
+while (<>)
+{
+    s/(^|\n)[\n\s]*/$1/g;
+    print;
+}
+
+
+
+=begin doc
+
+Parse the options and return suitable values.
+
+=end doc
+
+=cut
+
+sub parsedOptions
+{
+    my %vars;
+
+    exit
+      if (
+           !GetOptions( "help"    => \$vars{ 'help' },
+                        "verbose" => \$vars{ 'verbose' } ) );
+    pod2usage(1) if ( $vars{ 'help' } );
+
+    return (%vars);
+
+}

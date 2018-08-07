@@ -65,6 +65,25 @@ Example:
 
 
 
+collapse
+--------
+
+Remove extraneous whitespace from lines, and remove empty-lines entirely.
+
+Example:
+
+     $ echo -e "Test1\n    f  \n\nTest2\n\n\n\n" | ./collapse
+     Test1
+     f
+     Test2
+
+Alternatives:
+
+* `tr`
+* ...
+
+
+
 dupes
 -----
 
