@@ -2,16 +2,22 @@ sysadmin-utils
 ==============
 
 This repository contains a small collection of scripts that might be
-useful to sysadmins.
+useful to sysadmins.  I put it together myself to centralise the small
+tools that I find useful, and it seems to be popular.
 
-Contributions of new scripts are very welcome, as are suggestions for
-things to add or include:
+I used to solicit the inclusion of new tools, but have slowly come
+to realize that "less is more".  I __love__ the idea of sysadmins,
+developers, and other people building up their own toolkits, but also
+find that people submit things that I just don't understand the appeal of.
 
-* Distribution-specific tools for modifying Debian Packages, RPMs, or similar are probably best avoided.
-* Scripts with lots of dependencies should be avoided, unless they degrade or fail gracefully.
-* I have a preference for Perl, but that does not rule out code that
-needs to be compiled, or code in other scripting languages (Python,
-Ruby, etc).
+It makes sense that personal-tools are very personal, but it does mean
+rejection is almost always the default behaviour and that makes me feel
+bad.
+
+Instead of adding things here consider this repository a small collection of things that I use, and if you want to take some/all of utilities into your own use then please do so.  If not then I would __strongly__ encourage you to consider what tools would make your daily-life more useful and then collect them, __document__ them, and publish them yourself.
+
+
+In short the value here is the __idea__ of collecting your commonmost utilities and making them easy to install and update from one central-source.  Not the specific tools themselves.
 
 
 
