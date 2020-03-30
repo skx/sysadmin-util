@@ -1,5 +1,5 @@
 sysadmin-utils
-==============
+============
 
 This repository contains a small collection of scripts that might be
 useful to sysadmins.  I put it together myself to centralise the small
@@ -18,6 +18,10 @@ Instead of adding things here consider this repository a small collection of thi
 
 
 In short the value here is the __idea__ of collecting your commonmost utilities and making them easy to install and update from one central-source.  Not the specific tools themselves.
+
+There is a replacement repository which is still open, and which new additions can be made more freely:
+
+* https://github.com/skx/sysbox
 
 
 
